@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        html {
+            margin-right: auto;
+            margin-left: auto;
+            height: 100%;
+            width: 100%;
+        }
+        body {
+            margin-right: auto;
+            margin-left: auto;
+            height: 100%;
+            width: 100%;
+        }
+        .board {
+            margin-right: auto;
+            margin-left: auto;
+            height: 100%;
+            width: 70%;
+        }
+        .board:hover {
+            cursor: pointer;
+        }
+        .boardFloat {
+            height: 11.1%;
+            width: 90%;
+            margin-right: auto;
+            margin-left: auto;
+            float: left;
+        }
+        .boards {
+            background-color: wheat;
+            width: 10%;
+            height: 100%;
+            border: solid 0.1px black;
+            float: left;
+        }
+        .boards:hover {
+            background-color: rgb(136, 103, 41);
+        }
+        .boards img {
+            height: 82%;
+            width: 75%;
+            left: 4%;
+            position:relative;
+            top: 10%;
+            left: 10%;
+            filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.6));
+        }
+        .getedBoard {
+            height: 40%;
+            width: 15%;
+            background-color: rgb(160, 135, 88);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .getedBoard img{
+            height: 20%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body id="body">
+    <div id="getedKomaYou" style="float: left;" class="getedBoard">
+        <p>押せないときはダブルクリックしてね〜〜</p>
+    </div>
+    <div id="getedKomaMe" style="float: right;" class="getedBoard"></div>
+    <div class="board" id="board"></div>
+    <script src="/js/script.js"></script>
+</body>
+</html>
