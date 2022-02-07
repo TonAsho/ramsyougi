@@ -11,13 +11,15 @@ if(senteNumber === 0) {
 } else {
     goteNumber = 0;
 }
-let getedKomaMe = [];
-let getedKomaYou = [];
+let getedKomaMe = {};
+let getedKomaYou = {};
 let komaCount = 0;
 let onClicked = false;
 let onClickedNumber = 0;
 let onClickedNumberGeted = 0;
 let nowGoing = [];
+let average = 100;
+let onAverage = 0;
 function goPieces() {
     for (let n = 1; n <= 81; n++) {
         let clickCount = 0;
@@ -35,12 +37,31 @@ function goPieces() {
                                 nedInArrayFGeted = Math.floor(n/9);
                                 nedInArrayLGeted = Math.floor(n%9-1);
                             }
-                            komaDeleter(nedInArrayFGeted, nedInArrayLGeted);
-                            document.getElementById(`${onClickedNumberGeted*100}`).remove();
+                            pieces[nedInArrayFGeted][nedInArrayLGeted] = onClickedNumberGeted;
+                            let there = false;
+                            for (let key in getedKomaMe) {
+                                if(!there) {
+                                    if(getedKomaMe[onAverage] === getedKomaMe[key]) {
+                                        delete getedKomaMe[onAverage];
+                                        there = true;
+                                    }   
+
+                                }
+                            }
+                            if(!there) {
+                                for (let key in getedKomaYou) {
+                                    if(getedKomaYou[onAverage] === getedKomaYou[key]) {
+                                        there = true;
+                                    }
+                                }
+                            }
+                            ///komaDeleter(nedInArrayFGeted, nedInArrayLGeted);
+                            document.getElementById(`${onClickedNumberGeted}`).remove();
                             onClickedNumberGeted = 0;
                             onClicked = false;
                             komaCount++;
                             nowGoing.length = 0;
+                            cleanGeted()
                             drawPiecesBack();
                             drawBoard();
                             drawPieces();
@@ -122,6 +143,7 @@ function goPieces() {
                 onClickedNumberGeted = 0;
                 onClicked = false;
                 nowGoing.length = 0;
+                cleanGeted();
                 drawPiecesBack();
                 drawBoard();
                 drawPieces();
@@ -209,132 +231,144 @@ function getedKomaAdder(komaNumber) {
         let newele = document.createElement("img");
         let getedKomaImage = choseKoma(komaNumber/10);
         newele.src = `/images/${getedKomaImage}`;
-        getedKomaMe.push(komaNumber)
-        newele.id = `${komaNumber*100}`;
-        newele.name = `${komaNumber*100}`;
+        getedKomaMe[average] = komaNumber/10;
+        newele.id = `${average}`;
         document.getElementById("getedKomaMe").appendChild(newele);
-        goPiecesGeted(komaNumber);
+        goPiecesGeted(average);
+        average++;
     } else if(komaNumber<10&&komaNumber>0){
         let newele = document.createElement("img");
         let getedKomaImage = choseKoma(komaNumber);
         newele.src = `/images/${getedKomaImage}`;
-        getedKomaYou.push(komaNumber)
+        getedKomaYou[average] = komaNumber*10;
         newele.style.transform = "rotate(180deg)"
-        newele.id = `${komaNumber*100}`;
-        newele.name = `${komaNumber*100}`;
+        newele.id = `${average}`
         document.getElementById("getedKomaYou").appendChild(newele);
-        goPiecesGeted(komaNumber);
+        goPiecesGeted(average);
+        average++;
     } else if(komaNumber<0&&komaNumber>-10) {
-        console.log(3)
         let newele = document.createElement("img");
         let getedKomaImage = choseKoma(komaNumber*-1);
         newele.src = `/images/${getedKomaImage}`;
-        getedKomaYou.push(komaNumber)
-        newele.id = `${komaNumber*100}`;
-        newele.name = `${komaNumber*100}`;
+        getedKomaYou[average] = komaNumber*-10;
+        newele.id = `${average}`
         newele.style.transform = "rotate(180deg)"
         document.getElementById("getedKomaYou").appendChild(newele);
-        goPiecesGeted(komaNumber);
+        goPiecesGeted(average);
+        average++;
     } else if(komaNumber <= -10) {
         let newele = document.createElement("img");
         let getedKomaImage = choseKoma(komaNumber*-0.1);
         newele.src = `/images/${getedKomaImage}`;
-        getedKomaMe.push(komaNumber)
-        newele.id = `${komaNumber*100}`;
-        newele.name = `${komaNumber*100}`;
+        getedKomaMe[average] = komaNumber*-0.1;
+        newele.id = `${average}`
         document.getElementById("getedKomaMe").appendChild(newele);
-        goPiecesGeted(komaNumber);
+        goPiecesGeted(average);
+        average++;
     }
 }
-function goPiecesGeted(number) {
+function goPiecesGeted(average) {
     let clickCount = 0;
-    for(let i=0;i<document.getElementsByName(`${number*100}`).length;i++) {
-        document.getElementsByName(`${number*100}`)[i].addEventListener("click", function() {
-                if (clickCount === 0) {
-                    if(number === 1) {
-                        for(let n=0;n<9;n+=1) {
-                            let isis = true;
-                            for(let nxy = 0;nxy<9;nxy+=1) {
-                                if(pieces[nxy][n] === 10) {
-                                    isis = false;
-                                    nxy = 9;
-                                }
-                            }
-                            if(isis) {
-                                for(let nn = n+1;nn < 82; nn+=9) {
-                                    if(getNumber(nn) === 0&&!isBottom(nn)) {
-                                        nowGoing.push(nn);
-                                    }
-                                }
-                            }
-                        }
-                    }else if(number === 10) {
-                        for(let n=0;n<9;n+=1) {
-                            let isis = true;
-                            for(let nxy = 0;nxy<9;nxy+=1) {
-                                if(pieces[nxy][n] === 1) {
-                                    isis = false;
-                                    nxy = 9;
-                                }
-                            }
-                            if(isis) {
-                                for(let nn = n+1;nn < 82; nn+=9) {
-                                    if(getNumber(nn) === 0&&!isBottom2(nn)) {
-                                        nowGoing.push(nn);
-                                    }
-                                }
-                            }
-                        }
-                    } else if(number===20){
-                        for(let n = 1;n <= 81; n++) {
-                            if(getNumber(n) === 0&&!isBottom(n)) {
-                                nowGoing.push(n);
-                            }
-                        }
-                    } else if(number === 2) {
-                        for(let n = 1;n <= 81; n++) {
-                            if(getNumber(n) === 0&&!isBottom2(n)) {
-                                nowGoing.push(n);
-                            }
-                        }
-                    } else if(number === 30) {
-                        for(let n = 1;n <= 81; n++) {
-                            if(getNumber(n) === 0&&getHeight(n)>1) {
-                                nowGoing.push(n);
-                            }
-                        }
-                    } else if(number === 3){
-                        for(let n = 1;n <= 81; n++) {
-                            if(getNumber(n) === 0&&getHeight(n)<6) {
-                                nowGoing.push(n);
-                            }
-                        }
-                    }else {
-                        for(let n = 1;n <= 81; n++) {
-                            if(getNumber(n) === 0) {
-                                nowGoing.push(n);
-                            }
-                        }
-                    }
-                    for(let nstyle=0;nstyle<nowGoing.length;nstyle++) {
-                        changeStyleBoards(nowGoing[nstyle]);
-                    }
-                    onClicked = true;
-                    onClickedNumberGeted  = number;
-                    changeStyleBoard(number*100);
-                    clickCount = 1;
-                } else {
-                    for(let nstyle=0;nstyle<nowGoing.length;nstyle++) {
-                        changeStyleBoardBack(nowGoing[nstyle]);
-                    }
-                    onClicked = false;
-                    onClickedNumberGeted  = 0;
-                    document.getElementById(number*100).style.backgroundColor = "rgb(160, 135, 88)"
-                    clickCount = 0;
-                }  
-            
-        })
+    let numbers;
+    for (let key in getedKomaMe) {
+        if(getedKomaMe[average] === getedKomaMe[key]) {
+            numbers =getedKomaMe[average];
+        }   
     }
+    for (let key in getedKomaYou) {
+        if(getedKomaYou[average] === getedKomaYou[key]) {
+            numbers =getedKomaYou[average];
+        }
+    }
+    document.getElementById(`${average}`).addEventListener("click", function() {
+        if(isOk4(numbers)&&komaCount%2===goteNumber || isOk3(numbers)&&komaCount%2===senteNumber) {
+            if (clickCount === 0) {
+                if(numbers === 1) {
+                    for(let n=0;n<9;n+=1) {
+                        let isis = true;
+                        for(let nxy = 0;nxy<9;nxy+=1) {
+                            if(pieces[nxy][n] === 1) {
+                                isis = false;
+                                nxy = 9;
+                            }
+                        }
+                        if(isis) {
+                            for(let nn = n+1;nn < 82; nn+=9) {
+                                if(getNumber(nn) === 0&&!isBottom(nn)) {
+                                    nowGoing.push(nn);
+                                }
+                            }
+                        }
+                    }
+                }else if(numbers === 10) {
+                    for(let n=0;n<9;n+=1) {
+                        let isis = true;
+                        for(let nxy = 0;nxy<9;nxy+=1) {
+                            if(pieces[nxy][n] === 10) {
+                                isis = false;
+                                nxy = 9;
+                            }
+                        }
+                        if(isis) {
+                            for(let nn = n+1;nn < 82; nn+=9) {
+                                if(getNumber(nn) === 0&&!isBottom2(nn)) {
+                                    nowGoing.push(nn);
+                                }
+                            }
+                        }
+                    }
+                } else if(numbers===2){
+                    for(let n = 1;n <= 81; n++) {
+                        if(getNumber(n) === 0&&!isBottom(n)) {
+                            nowGoing.push(n);
+                        }
+                    }
+                } else if(numbers === 20) {
+                    for(let n = 1;n <= 81; n++) {
+                        if(getNumber(n) === 0&&!isBottom2(n)) {
+                            nowGoing.push(n);
+                        }
+                    }
+                } else if(numbers === 3) {
+                    for(let n = 1;n <= 81; n++) {
+                        if(getNumber(n) === 0&&getHeight(n)>1) {
+                            nowGoing.push(n);
+                        }
+                    }
+                } else if(numbers === 30){
+                    for(let n = 1;n <= 81; n++) {
+                        if(getNumber(n) === 0&&getHeight(n)<6) {
+                            nowGoing.push(n);
+                        }
+                    }
+                }else {
+                    for(let n = 1;n <= 81; n++) {
+                        if(getNumber(n) === 0) {
+                            nowGoing.push(n);
+                        }
+                    }
+                }
+                for(let nstyle=0;nstyle<nowGoing.length;nstyle++) {
+                    changeStyleBoards(nowGoing[nstyle]);
+                }
+                onClicked = true;
+                onAverage = average;
+                onClickedNumberGeted  = numbers;
+                changeStyleBoard(`${average}`);
+                clickCount = 1;
+            } else {
+                for(let nstyle=0;nstyle<nowGoing.length;nstyle++) {
+                    changeStyleBoardBack(nowGoing[nstyle]);
+                }
+                onClicked = false;
+                onAverage = 0;
+                onClickedNumberGeted  = 0;
+                document.getElementById(`${average}`).style.backgroundColor = "rgb(160, 135, 88)"
+                clickCount = 0;
+            }  
+        }
+    })
+    
 
 }
 function changeStyleBoard(number) {
@@ -389,10 +423,10 @@ let pieces = [
     [20, 30, 40, 50, 80, 50, 40, 30, 20],
     [0, 60, 0, 0, 0, 0, 0, 70, 0],
     [10, 10, 10, 10, 10, 10, 10, 10, 10],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1],
     [0, 7, 0, 0, 0, 0, 0, 6, 0],
     [2, 3, 4, 5, 8, 5, 4, 3, 2],
 ];
@@ -1437,6 +1471,20 @@ function isOkYour(number) {
         return false;
     }
 }
+function isOk3(number) {
+    if(number<10) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function isOk4(number) {
+    if(number<10) {
+        return true;
+    } else {
+        return false;
+    }
+}
 function isBottom(number) {
     for (let n = 1; n <= 9; n++) {
         if(n === number) {
@@ -1452,4 +1500,11 @@ function isBottom2(number) {
         } 
     }
     return false;
+}
+function cleanGeted() {
+    ///今日はここから
+    for (let n = 0; n < getedKomaMe.length; n++) {
+        const element = getedKomaMe[n];
+        
+    }
 }
