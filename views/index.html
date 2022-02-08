@@ -60,7 +60,11 @@
             margin-left: auto;
             margin-right: auto;
         }
-        .getedBoard img{
+        .komaees {
+            height: 100%;
+            width: 100%;
+        }
+        .komaees img{
             height: 20%;
             margin-left: auto;
             margin-right: auto;
@@ -69,9 +73,11 @@
 </head>
 <body id="body">
     <div id="getedKomaYou" style="float: left;" class="getedBoard">
-        <p>押せないときはダブルクリックしてね〜〜</p>
+        <div id="getedKomaYou2" class="komaees"></div>
     </div>
-    <div id="getedKomaMe" style="float: right;" class="getedBoard"></div>
+    <div id="getedKomaMe" style="float: right;" class="getedBoard">
+        <div id="getedKomaMe2" class="komaees"></div>
+    </div>
     <div class="board" id="board"></div>
     <script src="/js/script.js"></script>
 </body>

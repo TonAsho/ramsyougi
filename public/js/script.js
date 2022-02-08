@@ -4,7 +4,7 @@ window.onload = function() {
     drawPieces();
     goPieces();
 }
-let senteNumber = Math.floor(Math.random() * 1);
+let senteNumber = Math.floor(Math.random() * 2);
 let goteNumber;
 if(senteNumber === 0) {
     goteNumber = 1;
@@ -55,17 +55,17 @@ function goPieces() {
                                     }
                                 }
                             }
-                            ///komaDeleter(nedInArrayFGeted, nedInArrayLGeted);
+                            komaDeleter();
                             document.getElementById(`${onClickedNumberGeted}`).remove();
                             onClickedNumberGeted = 0;
                             onClicked = false;
                             komaCount++;
                             nowGoing.length = 0;
-                            cleanGeted()
                             drawPiecesBack();
                             drawBoard();
                             drawPieces();
                             goPieces();
+                            cleanGeted()
                             return;
                         } else if (onClicked === true && onClickedNumber !== n) {
                             // 駒移動
@@ -135,6 +135,7 @@ function goPieces() {
                             drawBoard();
                             drawPieces();
                             goPieces();
+                            cleanGeted();
                             return;
                         } 
 
@@ -143,11 +144,11 @@ function goPieces() {
                 onClickedNumberGeted = 0;
                 onClicked = false;
                 nowGoing.length = 0;
-                cleanGeted();
                 drawPiecesBack();
                 drawBoard();
                 drawPieces();
                 goPieces();
+                cleanGeted();
             } else {
                     if(isOk(n)&&komaCount%2===goteNumber || isOkYour(n)&&komaCount%2===senteNumber){
                         if(getNumber(n) != 0) {
@@ -207,21 +208,21 @@ function redgeL(n) {
         return false;
     }
 }
-function komaDeleter(nedInArrayFGeted, nedInArrayLGeted) {
-    if (onClickedNumberGeted >= 10) {
-        pieces[nedInArrayFGeted][nedInArrayLGeted] = onClickedNumberGeted/10;
-        for (let nx = 0; nx < getedKomaMe.length; nx++) {
-            if(getedKomaMe[nx] === onClickedNumberGeted) {
-                getedKomaMe.splice(nx, 1);
-                nx = 82;
+function komaDeleter() {
+    console.log(onClickedNumberGeted)
+    console.log(onAverage)
+    if(onClickedNumberGeted >= 10) {
+        for (let key in getedKomaYou) {
+            if(key === String(onAverage)) {
+                delete getedKomaYou[key];
+                break;
             }
         }
     } else {
-        pieces[nedInArrayFGeted][nedInArrayLGeted] = onClickedNumberGeted*10;
-        for (let nx = 0; nx < getedKomaMe.length; nx++) {
-            if(getedKomaYou[nx] === onClickedNumberGeted) {
-                getedKomaYou.splice(nx, 1);
-                nx = 82;
+        for (let key in getedKomaMe) {
+            if(key === String(onAverage)) {
+                delete getedKomaMe[key];
+                break;
             }
         }
     }
@@ -233,7 +234,7 @@ function getedKomaAdder(komaNumber) {
         newele.src = `/images/${getedKomaImage}`;
         getedKomaMe[average] = komaNumber/10;
         newele.id = `${average}`;
-        document.getElementById("getedKomaMe").appendChild(newele);
+        document.getElementById("getedKomaMe2").appendChild(newele);
         goPiecesGeted(average);
         average++;
     } else if(komaNumber<10&&komaNumber>0){
@@ -243,7 +244,7 @@ function getedKomaAdder(komaNumber) {
         getedKomaYou[average] = komaNumber*10;
         newele.style.transform = "rotate(180deg)"
         newele.id = `${average}`
-        document.getElementById("getedKomaYou").appendChild(newele);
+        document.getElementById("getedKomaYou2").appendChild(newele);
         goPiecesGeted(average);
         average++;
     } else if(komaNumber<0&&komaNumber>-10) {
@@ -253,7 +254,7 @@ function getedKomaAdder(komaNumber) {
         getedKomaYou[average] = komaNumber*-10;
         newele.id = `${average}`
         newele.style.transform = "rotate(180deg)"
-        document.getElementById("getedKomaYou").appendChild(newele);
+        document.getElementById("getedKomaYou2").appendChild(newele);
         goPiecesGeted(average);
         average++;
     } else if(komaNumber <= -10) {
@@ -262,10 +263,11 @@ function getedKomaAdder(komaNumber) {
         newele.src = `/images/${getedKomaImage}`;
         getedKomaMe[average] = komaNumber*-0.1;
         newele.id = `${average}`
-        document.getElementById("getedKomaMe").appendChild(newele);
+        document.getElementById("getedKomaMe2").appendChild(newele);
         goPiecesGeted(average);
         average++;
     }
+    cleanGeted();
 }
 function goPiecesGeted(average) {
     let clickCount = 0;
@@ -1479,7 +1481,7 @@ function isOk3(number) {
     }
 }
 function isOk4(number) {
-    if(number<10) {
+    if(number>=10) {
         return true;
     } else {
         return false;
@@ -1502,9 +1504,41 @@ function isBottom2(number) {
     return false;
 }
 function cleanGeted() {
-    ///今日はここから
-    for (let n = 0; n < getedKomaMe.length; n++) {
-        const element = getedKomaMe[n];
-        
+    let arr = Object.keys(getedKomaMe).map((e)=>({ key: e, value: getedKomaMe[e] }));
+    arr.sort(function(a, b) {
+        if(a.value < b.value) return 1;
+        if(a.value > b.value) return -1;
+        return 0;
+    })
+    document.getElementById("getedKomaMe2").remove();
+    document.getElementById("getedKomaYou2").remove();
+    let newE = document.createElement("div");
+    newE.id = "getedKomaMe2";
+    newE.className = "komaees";
+    document.getElementById("getedKomaMe").appendChild(newE);
+    let newE2 = document.createElement("div");
+    newE2.id = "getedKomaYou2";
+    newE2.className = "komaees"
+    document.getElementById("getedKomaYou").appendChild(newE2);
+    if(Object.keys(getedKomaMe).length>0) {
+        for (let key in getedKomaMe) {
+            let newele = document.createElement("img");
+            let getedKomaImage = choseKoma(getedKomaMe[key]);
+            newele.src = `/images/${getedKomaImage}`;
+            newele.id = `${key}`;
+            document.getElementById("getedKomaMe2").appendChild(newele);
+            goPiecesGeted(Number(key));
+        }
+    }
+    if(Object.keys(getedKomaYou).length>0) {
+        for (let key in getedKomaYou) {
+            let neweles = document.createElement("img");
+            let getedKomaImage = choseKoma(getedKomaYou[key]/10);
+            neweles.src = `/images/${getedKomaImage}`;
+            neweles.id = `${key}`;
+            neweles.style.transform = "rotate(180deg)";
+            document.getElementById("getedKomaYou2").appendChild(neweles);
+            goPiecesGeted(Number(key))
+        }
     }
 }
