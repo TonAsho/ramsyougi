@@ -10,9 +10,9 @@ app.engine('ejs',ejs.renderFile);
 app.get("/", (req, res) => {
     res.render("home.ejs");
 });
-app.get("/game:/id", (req, res) => {
+app.get("/game/:id", (req, res) => {
     //今日はここから
-    console.log(req.params.id)
+    console.log(req.params.id, "hello")
     res.render("game.ejs");
 });
 
@@ -32,8 +32,6 @@ let interval = setInterval(function() {
         waitingUserCount-=2;
         io.sockets.emit("userCount", waitingUserCount);
     }
-    console.log(waitingUserCount)
-    console.log(waitings.length)
 }, 10000);
 
 io.on("connection", function(socket) {
