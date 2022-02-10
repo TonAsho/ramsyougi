@@ -22,6 +22,6 @@ socket.on("hello", (message) => {
 socket.on("userCount", (count) => {
     document.getElementById("userCount").innerHTML = `${count}人`;
 })
-socket.on("m", (m) => {
-    console.log(m)
+socket.on("m", (url) => {
+    history.pushState("", "", `/game/${url}`)
 })

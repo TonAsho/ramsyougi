@@ -10,7 +10,9 @@ app.engine('ejs',ejs.renderFile);
 app.get("/", (req, res) => {
     res.render("home.ejs");
 });
-app.get("/game", (req, res) => {
+app.get("/game:/id", (req, res) => {
+    //今日はここから
+    console.log(req.params.id)
     res.render("game.ejs");
 });
 
@@ -23,12 +25,14 @@ let interval = setInterval(function() {
         waitings.splice(n, 1);
         let n2 = Math.floor(Math.random() * waitings.length);
         let secondPerson = waitings[n2];
-        waitings.splice(n, 1);
+        waitings.splice(n2, 1);
         firstPerson.join(`${firstPerson.id}${secondPerson.id}`);
         secondPerson.join(`${firstPerson.id}${secondPerson.id}`);
-        io.to(`${firstPerson.id}${secondPerson.id}`).emit("m","joined to room");
+        io.to(`${firstPerson.id}${secondPerson.id}`).emit("m",`${firstPerson.id}${secondPerson.id}`);
         waitingUserCount-=2;
+        io.sockets.emit("userCount", waitingUserCount);
     }
+    console.log(waitingUserCount)
     console.log(waitings.length)
 }, 10000);
 
@@ -48,7 +52,6 @@ io.on("connection", function(socket) {
     socket.emit("hello", "うんこ");
     socket.on("disconnect", () => {
         deleteNumber(socket);
-        waitingUserCount--;
         io.sockets.emit("userCount", waitingUserCount);
     })
 })
