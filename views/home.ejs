@@ -4,56 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Play" />
     <title>Ram将棋は誰もが無料で使える、初心者から上段者までが楽しめるオンライン将棋アプリの決定版！</title>
-    <style>
-
-        html {
-            height: 100%;
-            width: 100%;
-        }
-        body {
-            height: 100%;
-            width: 100%;
-            background-color: black;
-        }
-        @media screen and(max-width: 480px) {
-            .main {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                margin: auto;
-                height: 100%;
-                width: 90%;
-                text-align: center;
-                background-color: wheat;
-            }
-        }
-        @media screen and(min-width: 1280px) {
-            .main {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                margin: auto;
-                height: 100%;
-                width: 45%;
-                text-align: center;
-                background-color: wheat;
-            }
-        }
-        .logo {
-            font-size: 40px;
-        }
-    </style>
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <div class="main">
+    <div class="main" id="main">
         <div class="logo">
             <h1>Ram将棋</h1>
         </div>
+        <div class="buttons">
+            <div class="wrap" id="start">
+                <button class="button n" style="margin: 6%;"><i class="fas fa-chess-board fa-spin" style="margin: 5%;"></i>対局開始</button>
+            </div>
+            <div class="wrap">
+                <button class="button n1" style="margin: 6%;"><i class="fas fa-eye" style="margin: 3%;"></i>観戦</button>
+            </div>
+            <div class="wrap">
+                <button class="button n2" style="margin: 6%;"><i class="fas fa-user" style="margin: 3%;"></i>マイページ</button>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="icon home">
+                <div class="tooltip">home</div>
+                <span><i class="fas fa-home"></i></span>
+            </div>
+            <div class="icon instagram">
+              <div class="tooltip">観戦</div>
+              <span><i class="fas fa-eye"></i></span>
+            </div>
+            <div class="icon twitter">
+              <div class="tooltip">Twitter</div>
+              <span><i class="fab fa-twitter"></i></span>
+            </div>
+            <div class="icon youtube">
+              <div class="tooltip">設定</div>
+              <span><i class="fas fa-cog"></i></span>
+            </div>
+          </div>
     </div>
+    <div id="wait" class="wait" style="display: none;">
+        <div class="main">
+            <div class="load">
+                <h1 class="number">マッチング中</h1>
+                <i class="fas fa-spinner fa-spin fa-5x" style="color: white;"></i>
+                <h2 class="number" id="userCount"></h2>
+                <div class="wrapper">
+                    <div class="icon back" id="back">
+                        <div class="tooltip">戻る</div>
+                        <span><i class="fas fa-long-arrow-alt-left"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/home.js"></script>
 </body>
 </html>
