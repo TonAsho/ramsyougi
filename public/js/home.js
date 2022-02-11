@@ -23,5 +23,10 @@ socket.on("userCount", (count) => {
     document.getElementById("userCount").innerHTML = `${count}人`;
 })
 socket.on("m", (url) => {
+    ///history.pushState("", "", `/game/${url}`)
     window.location.href = `./game/${url}`
+})
+socket.on("gameNotFound", (url) => {
+    console.log("not found")
+    alert(`url: ${url.url} was not found.`)
 })

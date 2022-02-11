@@ -11,13 +11,22 @@ app.get("/", (req, res) => {
     res.render("home.ejs");
 });
 app.get("/game/:id", (req, res) => {
-    //今日はここから
-    console.log(req.params.id, "hello")
-    res.render("game.ejs");
+    //今日はここから]
+    for (let n = 0; n < fightings.length; n++) {
+        ///req送信の勉強から
+        if(fightings[n] === req.params.id) {
+            res.render("game.ejs");
+        } else {
+            console.log("notFound")
+            io.to(socket.id).emit("gameNotFound", {url: req.params.id});
+        }
+        
+    }
 });
 
 let waitingUserCount = 0;
 let waitings = [];
+let fightings = [];
 let interval = setInterval(function() {
     while(waitings.length > 1) {
         let n = Math.floor(Math.random() * waitings.length);
@@ -28,6 +37,7 @@ let interval = setInterval(function() {
         waitings.splice(n2, 1);
         firstPerson.join(`${firstPerson.id}${secondPerson.id}`);
         secondPerson.join(`${firstPerson.id}${secondPerson.id}`);
+        fightings.push(`${firstPerson.id}${secondPerson.id}`);
         io.to(`${firstPerson.id}${secondPerson.id}`).emit("m",`${firstPerson.id}${secondPerson.id}`);
         waitingUserCount-=2;
         io.sockets.emit("userCount", waitingUserCount);
