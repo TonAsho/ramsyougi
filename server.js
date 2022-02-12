@@ -8,7 +8,7 @@ app.use(express.static("public"));
 app.use(express.static("views"));
 app.engine('ejs',ejs.renderFile);
 app.get("/", (req, res) => {
-    res.render("home.ejs");
+    res.render("home.ejs", {gameNotFound: "a"});
 });
 app.get("/game/:id", (req, res) => {
     //今日はここから]
@@ -16,12 +16,10 @@ app.get("/game/:id", (req, res) => {
         ///req送信の勉強から
         if(fightings[n] === req.params.id) {
             res.render("game.ejs");
-        } else {
-            console.log("notFound")
-            io.to(socket.id).emit("gameNotFound", {url: req.params.id});
-        }
-        
+            return;
+        } 
     }
+    res.render("home.ejs", {gameNotFound: "b"});
 });
 
 let waitingUserCount = 0;

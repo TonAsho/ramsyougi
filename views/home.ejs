@@ -60,6 +60,9 @@
             </div>
         </div>
     </div>
+    <% if(gameNotFound === "b"){ %>
+        <script>alert("game not found.");window.location.href = `http://localhost:3000`</script>
+    <% } %>
     <script src="/js/home.js"></script>
 </body>
 </html>
